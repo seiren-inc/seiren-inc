@@ -182,10 +182,23 @@
    ============================================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /*
+    GSAP-controlled elements set inline opacity/transform/filter at runtime.
+    Force their final state under reduced-motion to defeat those inline styles,
+    even if the JS path also handles it (defense in depth).
+  */
+  .reveal,
+  .section-line,
+  [data-hero-text] {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
   }
 }

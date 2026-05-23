@@ -1,7 +1,15 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_JP, Noto_Serif_JP } from "next/font/google";
 import { SEO_BASE_URL, SEO_SITE_NAME, isProductionEnvironment } from "@/lib/seo";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+import RevealObserver from "@/components/RevealObserver";
+import BackToTop from "@/components/BackToTop";
+import LenisProvider from "@/components/LenisProvider";
+import GSAPScrollAnimator from "@/components/GSAPScrollAnimator";
+import LayoutWrapper from "@/components/LayoutWrapper";
 import "./globals.css";
+import "../../public/assets/styles.css";
 
 const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
@@ -172,7 +180,23 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessLd) }}
         />
-        {children}
+        <a className="skip-link" href="#main-content">
+          本文へスキップ
+        </a>
+        <LayoutWrapper
+          header={<Header />}
+          footer={<Footer />}
+          extras={
+            <>
+              <RevealObserver />
+              <LenisProvider />
+              <GSAPScrollAnimator />
+              <BackToTop />
+            </>
+          }
+        >
+          {children}
+        </LayoutWrapper>
       </body>
     </html>
   );

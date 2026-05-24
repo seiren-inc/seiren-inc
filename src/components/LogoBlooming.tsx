@@ -4,15 +4,22 @@ import gsap from 'gsap';
 import { useRef } from 'react';
 
 /**
- * LogoBlooming Component
- * - 蓮の花のアイコンをSVGパスで描画し、GSAPで「開花」を表現する
- * - イントロダクションとして使用することを想定
+ * LogoBlooming
+ *
+ * 蓮の花のブランドマーク。SVG パスの開花アニメーションをエディトリアル
+ * トーンに合わせて整える。
+ *
+ * - `drop-shadow-xl` と `bg-brand-teal-light/20 blur-[60px] rounded-full
+ *   animate-pulse-glow` の周辺グロウを撤去し、清潔な白基調に揃える
+ * - 花弁の塗りはアクセントの淡ピンクのまま（ブランドアイデンティティ）
+ * - GSAP は `gsap.matchMedia()` で reduced-motion を尊重し、reduce 時は
+ *   花弁を最終状態にスナップしてフロート（浮遊）アニメも止める
  */
-export default function LogoBlooming({ 
-  className = "", 
-  size = "md",
-  interactive = true 
-}: { 
+export default function LogoBlooming({
+  className = '',
+  size = 'md',
+  interactive = true,
+}: {
   className?: string;
   size?: 'sm' | 'md' | 'lg';
   interactive?: boolean;
@@ -23,59 +30,88 @@ export default function LogoBlooming({
   const sizePx = {
     sm: 44,
     md: 64,
-    lg: 256
+    lg: 256,
   }[size];
 
-  useGSAP(() => {
-    if (!petalsRef.current) return;
+  useGSAP(
+    () => {
+      if (!petalsRef.current) return;
+      const petals = petalsRef.current.children;
+      const mm = gsap.matchMedia();
 
-    const petals = petalsRef.current.children;
-    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-
-    // 1. 各花びらのラインを描画 (Stroke Animation)
-    tl.fromTo(petals,
-      { strokeDasharray: 100, strokeDashoffset: 100, opacity: 0, scale: 0.5, transformOrigin: 'center bottom' },
-      { 
-        strokeDashoffset: 0, 
-        opacity: 1, 
-        scale: 1, 
-        duration: size === 'sm' ? 1.5 : 2.5, 
-        stagger: {
-          amount: size === 'sm' ? 0.8 : 1.5,
-          from: 'center'
-        }
-      }
-    );
-
-    // 2. 塗り（Fill）をじんわりと入れる
-    tl.to(petals, {
-      fill: 'var(--brand-accent)',
-      fillOpacity: 0.15,
-      duration: 1.5,
-    }, '-=1.0');
-
-    if (interactive) {
-      // 3. 全体的な浮遊感を追加
-      gsap.to(petalsRef.current, {
-        y: size === 'sm' ? -2 : -10,
-        duration: 3,
-        repeat: -1,
-        yoyo: true,
-        ease: 'sine.inOut'
+      // reduced-motion: snap to bloomed final state, no float
+      mm.add('(prefers-reduced-motion: reduce)', () => {
+        gsap.set(petals, {
+          strokeDashoffset: 0,
+          opacity: 1,
+          scale: 1,
+          fill: 'var(--brand-accent)',
+          fillOpacity: 0.15,
+          transformOrigin: 'center bottom',
+        });
       });
-    }
 
-  }, { scope: container });
+      // no-preference: full editorial bloom + optional float
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+
+        tl.fromTo(
+          petals,
+          {
+            strokeDasharray: 100,
+            strokeDashoffset: 100,
+            opacity: 0,
+            scale: 0.5,
+            transformOrigin: 'center bottom',
+          },
+          {
+            strokeDashoffset: 0,
+            opacity: 1,
+            scale: 1,
+            duration: size === 'sm' ? 1.5 : 2.5,
+            stagger: {
+              amount: size === 'sm' ? 0.8 : 1.5,
+              from: 'center',
+            },
+          }
+        );
+
+        tl.to(
+          petals,
+          {
+            fill: 'var(--brand-accent)',
+            fillOpacity: 0.15,
+            duration: 1.5,
+          },
+          '-=1.0'
+        );
+
+        if (interactive && petalsRef.current) {
+          gsap.to(petalsRef.current, {
+            y: size === 'sm' ? -2 : -10,
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut',
+          });
+        }
+      });
+    },
+    { scope: container }
+  );
 
   return (
-    <div ref={container} className={`relative flex flex-col items-center justify-center ${className}`}>
+    <div
+      ref={container}
+      className={`relative flex flex-col items-center justify-center ${className}`}
+    >
       <svg
         viewBox="0 0 100 100"
         width={sizePx}
         height={sizePx}
-        className="drop-shadow-xl"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
         <circle cx="50" cy="50" r="2" fill="var(--brand-gold)" opacity="0.5" />
         <g ref={petalsRef}>
@@ -101,9 +137,6 @@ export default function LogoBlooming({
           ))}
         </g>
       </svg>
-      {size !== 'sm' && (
-        <div className="absolute inset-0 bg-brand-teal-light/20 blur-[60px] rounded-full animate-pulse-glow" style={{ zIndex: -1 }} />
-      )}
     </div>
   );
 }

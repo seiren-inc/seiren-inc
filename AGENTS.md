@@ -54,3 +54,25 @@ Execution requires explicit approval.
 - SEO / GEO / MEO impact uncertainty
 - Cross-site consistency issues
 - Navigation or hierarchy side effects
+
+## Cursor Cloud specific instructions
+
+Single Next.js 15 app (corporate site + aftercare MVP). **UI is placeholder-only** after design wipe (2026-06); implement new design from scratch. No Docker, database, or external services required for local dev.
+
+### Commands (see `CLAUDE.md` / `package.json`)
+- Install: `npm install`
+- Dev server: `npm run dev` (port 3000)
+- Lint: `npm run lint`
+- Test gate: `npm test` (runs lint + build)
+
+### First-time local setup (not in update script)
+1. Copy `.env.example` → `.env.local` and set `AFTERCARE_ADMIN_ACCESS_KEY` if testing admin auth.
+2. For aftercare token/admin flows, create `data/aftercare/cases.json` (gitignored; no seed script in repo). The directory and `submissions.json` are auto-created on first API write.
+
+### Aftercare dev notes
+- File-backed JSON under `data/aftercare/` (`cases.json`, `submissions.json`).
+- When `AFTERCARE_ADMIN_ACCESS_KEY` is unset, admin routes are open; with a key set, use cookie login or `x-aftercare-admin-key` header on API routes.
+- Corporate pages work with dev server only; aftercare E2E needs seeded `cases.json`.
+
+### Dev server
+Run `npm run dev` in a persistent session (tmux). Hot reload picks up most source changes; restart if env or `next.config` changes are not reflected.

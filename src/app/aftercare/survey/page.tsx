@@ -1,11 +1,7 @@
 import type { Metadata } from "next";
-import AftercarePageShell from "@/components/aftercare/AftercarePageShell";
-import AftercareSurveyForm from "@/components/aftercare/AftercareSurveyForm";
-import {
-  AFTERCARE_DEFAULT_SOURCE,
-  AFTERCARE_TEXT,
-} from "@/constants/aftercare";
+import { AFTERCARE_DEFAULT_SOURCE, AFTERCARE_TEXT } from "@/constants/aftercare";
 import { getAftercarePageMeta } from "@/lib/aftercare/getAftercarePageMeta";
+import SurveyForm from "./survey-form";
 
 export const metadata: Metadata = getAftercarePageMeta("survey");
 
@@ -24,11 +20,10 @@ export default async function AftercareSurveyPage({
   const token = params?.token?.trim() || null;
 
   return (
-    <AftercarePageShell
-      pageKey="survey"
-      lead={AFTERCARE_TEXT.surveyLead}
-    >
-      <AftercareSurveyForm source={source} token={token} />
-    </AftercarePageShell>
+    <main id="main-content">
+      <h1>アンケート</h1>
+      <p>{AFTERCARE_TEXT.surveyLead}</p>
+      <SurveyForm source={source} token={token} />
+    </main>
   );
 }

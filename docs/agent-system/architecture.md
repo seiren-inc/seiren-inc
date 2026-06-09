@@ -6,7 +6,7 @@
 2. **AGENTS.md** — always-read execution contract (repo-wide, thin)
 3. **docs/agent-system/** — meta-layer: rules about rules (this directory)
 4. **docs/ai/** — operating documents (execution-contract, handoff, runtime-shelf, decision-log)
-5. **docs/** — domain docs (design-spec, seo-geo-meo, etc.)
+5. **docs/** — domain docs (seo-geo-meo, agent-system, etc.)
 6. **.claude/rules/** — scoped operating rules loaded on demand per task type
 7. **.claude/skills/** — workflow skills invoked per task
 8. **.codex/** — Codex-specific allowlists and rules

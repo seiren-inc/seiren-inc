@@ -7,7 +7,6 @@ const normalizePath = (route: string): string =>
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [
     "/",
-    "/about",
     "/business",
     "/company",
     "/contact",

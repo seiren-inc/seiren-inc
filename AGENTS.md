@@ -57,7 +57,7 @@ Execution requires explicit approval.
 
 ## Cursor Cloud specific instructions
 
-Single Next.js 15 app (corporate site + aftercare MVP). No Docker, database, or external services required for local dev.
+Single Next.js 15 app (corporate site + aftercare MVP). **UI is placeholder-only** after design wipe (2026-06); implement new design from scratch. No Docker, database, or external services required for local dev.
 
 ### Commands (see `CLAUDE.md` / `package.json`)
 - Install: `npm install`

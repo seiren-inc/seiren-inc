@@ -9,7 +9,7 @@
 - `.claude/skills/<skill>/` — load when the skill is invoked
 - `docs/ai/*` — load when referenced by AGENTS.md or a rule file
 - `docs/agent-system/*` — load only when editing the agent system itself
-- Domain docs (`docs/design-spec-*`, `docs/seo-geo-meo/*`) — load only for matching work
+- Domain docs (`docs/seo-geo-meo/*`) — load only for matching work
 
 ## Progressive Disclosure
 

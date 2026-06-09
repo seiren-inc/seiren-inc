@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import AftercarePageShell from "@/components/aftercare/AftercarePageShell";
-import AftercareReviewActions from "@/components/aftercare/AftercareReviewActions";
 import {
   AFTERCARE_DEFAULT_SOURCE,
   AFTERCARE_DEFAULT_LINKS,
@@ -11,6 +9,7 @@ import {
 import { getAftercarePageMeta } from "@/lib/aftercare/getAftercarePageMeta";
 import { buildAftercareHref } from "@/lib/aftercare/navigation";
 import { getAftercareCaseByToken } from "@/lib/aftercare/repository";
+import ReviewActions from "./review-actions";
 
 export const metadata: Metadata = getAftercarePageMeta("review");
 
@@ -38,54 +37,30 @@ export default async function AftercareReviewPage({
     token,
   });
 
-  // 口コミ URL が未設定の場合はアルバムへ直接案内する
   if (!reviewUrl) {
     return (
-      <AftercarePageShell
-        pageKey="review"
-        lead={AFTERCARE_TEXT.reviewThanks}
-      >
-        <div className="space-y-6">
-          <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-left">
-            <p className="text-base leading-[2] text-neutral-text tracking-[0.04em]">
-              現在、口コミ案内の準備中です。引き続き写真案内へお進みください。
-            </p>
-          </div>
-          <Link
-            href={albumHref}
-            className="flex min-h-12 w-full items-center justify-center rounded-xl bg-brand-primary px-6 py-4 text-center text-base font-bold text-white transition-colors hover:bg-brand-hover"
-          >
-            {AFTERCARE_TEXT.reviewSkipCta}
-          </Link>
-        </div>
-      </AftercarePageShell>
+      <main id="main-content">
+        <h1>口コミ案内</h1>
+        <p>{AFTERCARE_TEXT.reviewThanks}</p>
+        <p>口コミ案内の準備中です。</p>
+        <p>
+          <Link href={albumHref}>{AFTERCARE_TEXT.reviewSkipCta}</Link>
+        </p>
+      </main>
     );
   }
 
   return (
-    <AftercarePageShell
-      pageKey="review"
-      lead={AFTERCARE_TEXT.reviewThanks}
-    >
-      <div className="space-y-6">
-        {/* 口コミ案内カード */}
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 text-left">
-          <p className="text-base leading-[2] text-neutral-text tracking-[0.04em] mb-4">
-            {AFTERCARE_TEXT.reviewRequest}
-          </p>
-          <p className="text-[13px] leading-relaxed text-neutral-muted">
-            ※ {AFTERCARE_TEXT.reviewOptional}
-          </p>
-        </div>
-
-        {/* ボタンエリア */}
-        <AftercareReviewActions
-          submissionId={submissionId}
-          source={source}
-          token={token}
-          reviewUrl={reviewUrl}
-        />
-      </div>
-    </AftercarePageShell>
+    <main id="main-content">
+      <h1>口コミ案内</h1>
+      <p>{AFTERCARE_TEXT.reviewThanks}</p>
+      <p>{AFTERCARE_TEXT.reviewRequest}</p>
+      <ReviewActions
+        submissionId={submissionId}
+        source={source}
+        token={token}
+        reviewUrl={reviewUrl}
+      />
+    </main>
   );
 }

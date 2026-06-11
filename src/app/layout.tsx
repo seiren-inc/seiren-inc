@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
+import AuthHeader from "@/components/auth-header";
 import { SEO_BASE_URL, SEO_SITE_NAME, isProductionEnvironment } from "@/lib/seo";
 import "./globals.css";
 
@@ -77,7 +79,10 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }}
         />
         <a href="#main-content">本文へスキップ</a>
-        {children}
+        <ClerkProvider>
+          <AuthHeader />
+          {children}
+        </ClerkProvider>
       </body>
     </html>
   );
